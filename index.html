@@ -1,0 +1,465 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Portfólio de Robert da Cruz Santana, desenvolvedor Full Stack em São Paulo.">
+<title>Robert Santana Dev</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;700&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap">
+<style>
+/* Layout: coluna única de 960px; hero como janela de terminal, seções como diretórios (~/stack, ~/experiencia, ~/projetos), experiência como git log */
+:root {
+  --bg: #04070d;
+  --panel: #0a1220;
+  --panel-2: #0e1a2e;
+  --line: #16284a;
+  --fg: #d6e2f5;
+  --muted: #7d90b0;
+  --blue: #2f8cff;
+  --cyan: #5fd4ff;
+  --ok: #3ddc97;
+  --warn: #ffc857;
+  --display: "Chakra Petch", "Rajdhani", "Segoe UI", sans-serif;
+  --body: "IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "Cascadia Code", Consolas, monospace;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--body);
+  font-size: 16px;
+  line-height: 1.6;
+  min-height: 100%;
+}
+#grid {
+  position: fixed; inset: 0; width: 100%; height: 100%;
+  z-index: 0; pointer-events: none; opacity: .55;
+}
+body::before {
+  content: ""; position: fixed; inset: 0 0 auto;
+  height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg);
+}
+.wrap {
+  position: relative; z-index: 1;
+  max-width: 960px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0 64px;
+}
+
+/* nav */
+nav {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding-block: 14px;
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--line);
+  font-family: var(--mono); font-size: 13px;
+}
+nav .logo { color: var(--cyan); font-weight: 700; text-decoration: none; }
+nav .logo span { color: var(--muted); font-weight: 400; }
+nav ul { display: flex; gap: 18px; list-style: none; margin: 0; padding: 0; flex-wrap: wrap; }
+nav a { color: var(--muted); text-decoration: none; }
+nav a:hover, nav a:focus-visible { color: var(--fg); }
+nav ul a::before { content: "./"; color: var(--blue); }
+@media (max-width: 560px) { nav ul { display: none; } }
+
+a:focus-visible, button:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; border-radius: 4px; }
+
+/* hero terminal */
+.hero { padding-block: 56px 40px; }
+.term {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 0 0 1px rgba(47,140,255,.08), 0 30px 80px -30px rgba(47,140,255,.35);
+}
+.term-bar {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 14px; background: var(--panel-2);
+  border-bottom: 1px solid var(--line);
+  font-family: var(--mono); font-size: 12px; color: var(--muted);
+}
+.term-bar i { width: 11px; height: 11px; border-radius: 50%; background: var(--line); display: inline-block; }
+.term-bar i:nth-child(1) { background: #3a4d70; }
+.term-bar i:nth-child(2) { background: #2f5aa0; }
+.term-bar i:nth-child(3) { background: var(--blue); }
+.term-bar b { margin-left: 8px; font-weight: 400; }
+.term-body { padding: 24px clamp(16px, 4vw, 36px) 32px; font-family: var(--mono); font-size: 14px; }
+.prompt { color: var(--muted); }
+.prompt .u { color: var(--ok); }
+.prompt .p { color: var(--blue); }
+.prompt .cmd { color: var(--fg); }
+h1 {
+  font-family: var(--display); font-weight: 700;
+  font-size: clamp(38px, 7.5vw, 72px); line-height: 1;
+  letter-spacing: -.01em; margin: 18px 0 10px;
+  text-wrap: balance;
+  background: linear-gradient(90deg, var(--fg) 0%, var(--fg) 45%, var(--cyan) 75%, var(--blue) 100%);
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.role { font-family: var(--mono); color: var(--cyan); font-size: clamp(14px, 2.2vw, 17px); margin: 0 0 22px; }
+.role .cursor {
+  display: inline-block; width: .6em; height: 1.1em; vertical-align: -.2em;
+  background: var(--blue); margin-left: 4px; animation: blink 1.1s steps(1) infinite;
+}
+@keyframes blink { 50% { opacity: 0; } }
+.hero p.intro {
+  font-family: var(--body); font-size: 17px; max-width: 62ch; margin: 0 0 24px; color: var(--fg);
+}
+.json {
+  font-family: var(--mono); font-size: 13.5px; line-height: 1.75;
+  background: var(--bg); border: 1px solid var(--line); border-radius: 8px;
+  padding: 16px 18px; margin: 0 0 24px; overflow-x: auto; white-space: pre;
+}
+.k { color: var(--cyan); } .s { color: #9fd0ff; } .n { color: var(--warn); } .c { color: var(--muted); } .b { color: var(--ok); }
+.cta { display: flex; flex-wrap: wrap; gap: 12px; }
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--mono); font-size: 13.5px; font-weight: 500;
+  padding: 11px 16px; border-radius: 6px; text-decoration: none;
+  border: 1px solid var(--blue); color: var(--fg); background: transparent; cursor: pointer;
+  transition: background .2s, box-shadow .2s;
+}
+.btn.primary { background: var(--blue); color: #fff; }
+.btn:hover { box-shadow: 0 0 22px -4px var(--blue); }
+.btn.ghost:hover { background: rgba(47,140,255,.1); }
+.btn.wa { border-color: var(--ok); }
+.btn.wa svg { color: var(--ok); }
+.btn.wa:hover { background: rgba(61,220,151,.08); box-shadow: 0 0 22px -4px var(--ok); }
+
+/* sections */
+section { padding-block: 44px 8px; scroll-margin-top: 70px; }
+.sec-head { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; margin-bottom: 22px; }
+.sec-head h2 {
+  font-family: var(--display); font-size: clamp(24px, 4vw, 32px); font-weight: 700;
+  margin: 0; letter-spacing: .01em; text-wrap: balance;
+}
+.sec-head code { font-family: var(--mono); font-size: 13px; color: var(--muted); }
+.sec-head code b { color: var(--blue); font-weight: 400; }
+.sec-head::after { content: ""; flex: 1; min-width: 40px; height: 1px; background: linear-gradient(90deg, var(--line), transparent); align-self: center; }
+
+/* sobre */
+.about { display: grid; grid-template-columns: 1.4fr 1fr; gap: 28px; }
+.about > * { min-width: 0; }
+.about p { margin: 0 0 14px; max-width: 62ch; }
+.facts { list-style: none; padding: 0; margin: 0; font-family: var(--mono); font-size: 13.5px; border-left: 1px solid var(--line); padding-left: 18px; display: grid; gap: 10px; }
+.facts span { display: block; color: var(--muted); font-size: 11.5px; text-transform: uppercase; letter-spacing: .08em; }
+@media (max-width: 720px) { .about { grid-template-columns: 1fr; } }
+
+/* stack */
+.stack { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px; }
+.stack-group { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; padding: 16px; min-width: 0; }
+.stack-group h3 { font-family: var(--mono); font-size: 12px; font-weight: 500; color: var(--blue); text-transform: uppercase; letter-spacing: .1em; margin: 0 0 12px; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.tag { font-family: var(--mono); font-size: 12.5px; padding: 4px 9px; border-radius: 4px; background: var(--panel-2); border: 1px solid var(--line); color: var(--fg); }
+.tag.learning { border-color: var(--warn); color: var(--warn); }
+.tag.learning::after { content: " ↻"; }
+
+/* git log */
+.log { position: relative; display: grid; gap: 18px; }
+.log::before { content: ""; position: absolute; left: 7px; top: 8px; bottom: 8px; width: 2px; background: linear-gradient(var(--blue), var(--line)); }
+.commit { position: relative; padding-left: 34px; }
+.commit::before {
+  content: ""; position: absolute; left: 0; top: 7px; width: 16px; height: 16px; border-radius: 50%;
+  background: var(--bg); border: 2px solid var(--blue);
+}
+.commit.head::before { background: var(--blue); box-shadow: 0 0 14px var(--blue); }
+.commit .meta { font-family: var(--mono); font-size: 12.5px; color: var(--muted); display: flex; flex-wrap: wrap; gap: 4px 12px; }
+.commit .hash { color: var(--warn); }
+.commit .ref { color: var(--ok); }
+.commit h3 { font-family: var(--display); font-size: 21px; margin: 4px 0 2px; }
+.commit h3 small { font-family: var(--body); font-size: 15px; color: var(--cyan); font-weight: 500; }
+.commit ul { margin: 8px 0 0; padding-left: 18px; color: var(--fg); max-width: 70ch; }
+.commit li { margin-bottom: 4px; }
+.commit li::marker { color: var(--blue); content: "+ "; font-family: var(--mono); }
+
+/* projetos */
+.projects { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 16px; }
+.proj {
+  background: var(--panel); border: 1px solid var(--line); border-radius: 10px;
+  padding: 20px; display: flex; flex-direction: column; gap: 10px; min-width: 0;
+  transition: border-color .2s, transform .2s;
+}
+.proj:hover { border-color: var(--blue); transform: translateY(-2px); }
+.proj .top { display: flex; justify-content: space-between; align-items: center; gap: 10px; font-family: var(--mono); font-size: 12px; }
+.proj .path { color: var(--muted); }
+.status { padding: 2px 8px; border-radius: 99px; border: 1px solid currentColor; white-space: nowrap; }
+.status.live { color: var(--ok); }
+.status.dev { color: var(--warn); }
+.proj h3 { font-family: var(--display); font-size: 22px; margin: 0; }
+.proj p { margin: 0; color: var(--fg); font-size: 15px; }
+.proj .tags { margin-top: auto; padding-top: 6px; }
+.proj a.link { font-family: var(--mono); font-size: 13px; color: var(--cyan); text-decoration: none; }
+.proj a.link:hover { text-decoration: underline; }
+.proj .links { display: flex; flex-wrap: wrap; gap: 6px 16px; }
+
+/* formação */
+.edu { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
+.edu div { border: 1px solid var(--line); border-radius: 8px; padding: 16px; background: var(--panel); }
+.edu b { font-family: var(--display); font-size: 18px; display: block; }
+.edu span { font-family: var(--mono); font-size: 12.5px; color: var(--muted); }
+
+/* contato */
+.contact { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 24px clamp(16px, 4vw, 32px); }
+.contact p { margin: 0 0 18px; max-width: 60ch; }
+.contact-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+.chan { display: flex; justify-content: space-between; align-items: center; gap: 10px; background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 10px 12px; font-family: var(--mono); font-size: 13px; min-width: 0; }
+.chan > span { min-width: 0; overflow-wrap: anywhere; }
+.chan small { display: block; color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .08em; }
+.chan a { color: var(--fg); text-decoration: none; }
+.chan a:hover { color: var(--cyan); }
+.copy { font-family: var(--mono); font-size: 12px; background: transparent; color: var(--blue); border: 1px solid var(--line); border-radius: 4px; padding: 4px 8px; cursor: pointer; flex-shrink: 0; }
+.copy:hover { border-color: var(--blue); }
+
+footer { margin-top: 48px; font-family: var(--mono); font-size: 12.5px; color: var(--muted); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; border-top: 1px solid var(--line); padding-top: 18px; }
+footer .ok { color: var(--ok); }
+
+@media (prefers-reduced-motion: reduce) {
+  .role .cursor { animation: none; }
+  .proj, .btn { transition: none; }
+  html { scroll-behavior: auto; }
+}
+</style>
+</head>
+<body>
+
+<canvas id="grid" aria-hidden="true"></canvas>
+
+<div class="wrap">
+  <nav>
+    <a class="logo" href="#topo">robert<span>@dev</span>:~$</a>
+    <ul>
+      <li><a href="#sobre">sobre</a></li>
+      <li><a href="#stack">stack</a></li>
+      <li><a href="#experiencia">experiencia</a></li>
+      <li><a href="#projetos">projetos</a></li>
+      <li><a href="#contato">contato</a></li>
+    </ul>
+  </nav>
+
+  <header class="hero" id="topo">
+    <div class="term">
+      <div class="term-bar"><i></i><i></i><i></i><b>robert@dev: ~/portfolio — bash</b></div>
+      <div class="term-body">
+        <div class="prompt"><span class="u">robert@dev</span>:<span class="p">~</span>$ <span class="cmd">whoami</span></div>
+        <h1>Robert da Cruz Santana</h1>
+        <p class="role">Desenvolvedor Full Stack · Angular · Python · SQL &amp; Oracle<span class="cursor" aria-hidden="true"></span></p>
+        <p class="intro">Oi! Eu sou o Robert, dev aqui de São Paulo. Passei os últimos três anos mexendo em sistemas corporativos: banco de dados, APIs, automações e aquela query que demorava demais até alguém parar pra arrumar. Hoje estou indo de vez para o full stack, e esse site é um pouco disso.</p>
+        <div class="prompt"><span class="u">robert@dev</span>:<span class="p">~</span>$ <span class="cmd">cat perfil.json</span></div>
+<pre class="json">{
+  <span class="k">"nome"</span>: <span class="s">"Robert Santana"</span>,
+  <span class="k">"local"</span>: <span class="s">"São Paulo/SP"</span>,
+  <span class="k">"anos_de_codigo"</span>: <span class="n">3</span>,
+  <span class="k">"foco"</span>: [<span class="s">"back-end"</span>, <span class="s">"banco de dados"</span>, <span class="s">"automação"</span>, <span class="s">"Angular"</span>],
+  <span class="k">"disponivel"</span>: <span class="b">true</span>  <span class="c">// híbrido ou presencial em SP</span>
+}</pre>
+        <div class="cta">
+          <a class="btn primary" href="#projetos">ver projetos →</a>
+          <a class="btn ghost wa" href="https://wa.me/5511977144668?text=Ol%C3%A1%20Robert%2C%20vi%20seu%20portf%C3%B3lio%20e%20gostaria%20de%20conversar!" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 11.9 11.9 0 0 0 4.6 4c1.7.7 2.4.8 3.2.7.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3z"/></svg>chamar no WhatsApp</a>
+          <a class="btn ghost" href="https://github.com/roberts0412" target="_blank" rel="noopener">github ↗</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section id="sobre">
+    <div class="sec-head"><h2>Sobre mim</h2><code><b>$</b> cat README.md</code></div>
+    <div class="about">
+      <div>
+        <p>Comecei como estagiário de TI na Eicon em 2022 e fui efetivado como Analista Programador. Lá aprendi na prática como um sistema grande funciona por dentro: telas em ColdFusion, regras de negócio em procedures Oracle e várias APIs conversando entre microsserviços.</p>
+        <p>O que eu mais curto é deixar as coisas mais rápidas e menos manuais. Já refatorei procedures que estavam travando o sistema e escrevi automações em Python que tiraram tarefas repetitivas do dia a dia do time.</p>
+        <p>Agora estou estudando Angular e criando projetos próprios para fechar o ciclo do front ao banco. Antes de tudo isso trabalhei com atendimento na Fast Shop, e isso me ajuda até hoje a pensar em quem está do outro lado da tela.</p>
+      </div>
+      <ul class="facts">
+        <li><span>Base</span>São Paulo/SP</li>
+        <li><span>Formação</span>Gestão da TI · UNINOVE</li>
+        <li><span>Metodologia</span>Scrum, squads ágeis</li>
+        <li><span>Idiomas</span>Português nativo · Inglês e espanhol básicos</li>
+        <li><span>Estudando agora</span>Angular (Alura)</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="stack">
+    <div class="sec-head"><h2>Stack</h2><code><b>$</b> ls ~/stack</code></div>
+    <div class="stack">
+      <div class="stack-group">
+        <h3>front-end</h3>
+        <div class="tags"><span class="tag learning">Angular</span><span class="tag">JavaScript</span><span class="tag">HTML</span><span class="tag">CSS</span></div>
+      </div>
+      <div class="stack-group">
+        <h3>back-end</h3>
+        <div class="tags"><span class="tag">Python</span><span class="tag">ColdFusion (CFML)</span><span class="tag">APIs REST</span><span class="tag">JSON</span><span class="tag">Microsserviços</span></div>
+      </div>
+      <div class="stack-group">
+        <h3>banco de dados</h3>
+        <div class="tags"><span class="tag">Oracle</span><span class="tag">PL/SQL</span><span class="tag">SQL</span><span class="tag">PostgreSQL</span><span class="tag">Tuning de queries</span></div>
+      </div>
+      <div class="stack-group">
+        <h3>devops &amp; ferramentas</h3>
+        <div class="tags"><span class="tag">Git</span><span class="tag">GitLab</span><span class="tag">Jenkins</span><span class="tag">Azure DevOps</span><span class="tag">CI/CD</span><span class="tag">Postman</span><span class="tag">Power BI</span><span class="tag">AutoIt</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="experiencia">
+    <div class="sec-head"><h2>Experiência</h2><code><b>$</b> git log --oneline carreira</code></div>
+    <div class="log">
+      <article class="commit head">
+        <div class="meta"><span class="hash">a3f9c21</span><span class="ref">(HEAD → full-stack)</span><span>jun/2024 – out/2025</span></div>
+        <h3>Analista Programador Júnior <small>@ Eicon</small></h3>
+        <ul>
+          <li>Desenvolvimento de sistemas web em ColdFusion, JavaScript, HTML e CSS com banco Oracle</li>
+          <li>Consumo e integração de APIs REST (JSON) entre microsserviços</li>
+          <li>Refatoração de queries e procedures PL/SQL com ganho real de performance</li>
+          <li>Automações em Python e AutoIt para rotinas do time</li>
+          <li>Squad Scrum com Git/GitLab e pipelines de CI/CD no Jenkins e Azure DevOps</li>
+        </ul>
+      </article>
+      <article class="commit">
+        <div class="meta"><span class="hash">7be04d8</span><span>jul/2022 – jun/2024</span></div>
+        <h3>Estagiário de TI <small>@ Eicon</small></h3>
+        <ul>
+          <li>Manutenção de sistemas em CFML e Oracle</li>
+          <li>Automação de rotinas internas, que acabou rendendo a efetivação</li>
+        </ul>
+      </article>
+      <article class="commit">
+        <div class="meta"><span class="hash">1c52e90</span><span>set/2019 – jan/2021</span></div>
+        <h3>Auxiliar de SAC <small>@ Fast Shop</small></h3>
+        <ul>
+          <li>Atendimento e resolução de problemas de clientes</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section id="projetos">
+    <div class="sec-head"><h2>Projetos</h2><code><b>$</b> ls -la ~/projetos</code></div>
+    <div class="projects">
+      <article class="proj">
+        <div class="top"><span class="path">~/amigo-secreto-facil</span><span class="status live">● no ar</span></div>
+        <h3>Amigo Secreto Fácil</h3>
+        <p>Site para organizar amigo secreto sem papelzinho: cria o grupo, faz o sorteio e cada um descobre o seu. Domínio próprio, hospedado na Netlify e monetizado com AdSense.</p>
+        <div class="links"><a class="link" href="https://amigosecretofacil.com.br" target="_blank" rel="noopener">amigosecretofacil.com.br ↗</a><a class="link" href="https://github.com/roberts0412/amigo-secreto-facil" target="_blank" rel="noopener">ver código ↗</a></div>
+        <div class="tags"><span class="tag">JavaScript</span><span class="tag">HTML/CSS</span><span class="tag">Netlify</span><span class="tag">AdSense</span></div>
+      </article>
+      <article class="proj">
+        <div class="top"><span class="path">~/painel-financeiro</span><span class="status dev">◐ em dev</span></div>
+        <h3>Painel Financeiro</h3>
+        <p>Dashboard de finanças pessoais para enxergar para onde o dinheiro vai todo mês. Comecei pensando em Power BI e migrei para Python com Streamlit.</p>
+        <div class="links"><a class="link" href="https://github.com/roberts0412/painel-financeiro" target="_blank" rel="noopener">ver código ↗</a></div>
+        <div class="tags"><span class="tag">Python</span><span class="tag">Streamlit</span><span class="tag">Pandas</span></div>
+      </article>
+      <article class="proj">
+        <div class="top"><span class="path">~/portfolio</span><span class="status live">● no ar</span></div>
+        <h3>Este portfólio</h3>
+        <p>Feito do zero, sem framework, com cara de terminal porque é onde eu passo boa parte do dia. Leve, responsivo e rápido de carregar.</p>
+        <div class="links"><a class="link" href="https://github.com/roberts0412/roberts0412.github.io" target="_blank" rel="noopener">ver código ↗</a></div>
+        <div class="tags"><span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">JavaScript</span><span class="tag">Canvas</span></div>
+      </article>
+    </div>
+  </section>
+
+  <section id="formacao">
+    <div class="sec-head"><h2>Formação</h2><code><b>$</b> cat certificados.txt</code></div>
+    <div class="edu">
+      <div><b>Tecnólogo em Gestão da TI</b><span>UNINOVE · 2022 – 2024</span></div>
+      <div><b>Angular</b><span>Alura · em andamento</span></div>
+    </div>
+  </section>
+
+  <section id="contato">
+    <div class="sec-head"><h2>Contato</h2><code><b>$</b> ./contato.sh</code></div>
+    <div class="contact">
+      <p>Estou aberto a vagas de Desenvolvedor Full Stack, híbridas ou presenciais em São Paulo. Se quiser trocar uma ideia sobre uma vaga ou um projeto, é só chamar.</p>
+      <div class="contact-row">
+        <div class="chan"><span><small>e-mail</small><a href="mailto:robertsant0412@gmail.com" id="mail">robertsant0412@gmail.com</a></span><button class="copy" type="button" data-copy="robertsant0412@gmail.com">copiar</button></div>
+        <div class="chan"><span><small>whatsapp</small><a href="https://wa.me/5511977144668?text=Ol%C3%A1%20Robert%2C%20vi%20seu%20portf%C3%B3lio%20e%20gostaria%20de%20conversar!" target="_blank" rel="noopener">mandar mensagem ↗</a></span><a class="copy" href="https://wa.me/5511977144668?text=Ol%C3%A1%20Robert%2C%20vi%20seu%20portf%C3%B3lio%20e%20gostaria%20de%20conversar!" target="_blank" rel="noopener" style="text-decoration:none">abrir</a></div>
+        <div class="chan"><span><small>github</small><a href="https://github.com/roberts0412" target="_blank" rel="noopener">/roberts0412 ↗</a></span></div>
+        <div class="chan"><span><small>linkedin</small><a href="https://www.linkedin.com/in/robertdacruzsantana" target="_blank" rel="noopener">/in/robertdacruzsantana ↗</a></span></div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <span><span class="ok">✔</span> build passou · v1.0.0</span>
+    <span>© 2026</span>
+  </footer>
+</div>
+
+<script>
+// botão copiar
+document.querySelectorAll('.copy').forEach(function (btn) {
+  btn.addEventListener('click', function () {
+    var txt = btn.getAttribute('data-copy');
+    var done = function () { btn.textContent = 'copiado!'; setTimeout(function () { btn.textContent = 'copiar'; }, 1600); };
+    try {
+      navigator.clipboard.writeText(txt).then(done, function () { selectMail(); });
+    } catch (e) { selectMail(); }
+  });
+});
+function selectMail() {
+  var el = document.getElementById('mail');
+  var r = document.createRange(); r.selectNodeContents(el);
+  var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+}
+
+// fundo: grade com pulsos azuis correndo pelas linhas
+(function () {
+  var c = document.getElementById('grid');
+  var ctx = c.getContext('2d');
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var S = 48, w, h, dpr, pulses = [];
+  function size() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    w = window.innerWidth; h = window.innerHeight;
+    c.width = w * dpr; c.height = h * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  function spawn() {
+    var horiz = Math.random() < .5;
+    return horiz
+      ? { x: -60, y: Math.floor(Math.random() * h / S) * S, dx: 1.4 + Math.random() * 1.6, dy: 0 }
+      : { x: Math.floor(Math.random() * w / S) * S, y: -60, dx: 0, dy: 1.4 + Math.random() * 1.6 };
+  }
+  function drawGrid() {
+    ctx.clearRect(0, 0, w, h);
+    ctx.strokeStyle = 'rgba(47,140,255,0.07)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    for (var x = 0; x <= w; x += S) { ctx.moveTo(x + .5, 0); ctx.lineTo(x + .5, h); }
+    for (var y = 0; y <= h; y += S) { ctx.moveTo(0, y + .5); ctx.lineTo(w, y + .5); }
+    ctx.stroke();
+    var g = ctx.createRadialGradient(w * .8, 0, 0, w * .8, 0, Math.max(w, h) * .7);
+    g.addColorStop(0, 'rgba(47,140,255,0.16)'); g.addColorStop(1, 'rgba(47,140,255,0)');
+    ctx.fillStyle = g; ctx.fillRect(0, 0, w, h);
+  }
+  function frame() {
+    drawGrid();
+    if (pulses.length < 6 && Math.random() < .03) pulses.push(spawn());
+    pulses = pulses.filter(function (p) {
+      p.x += p.dx; p.y += p.dy;
+      var tx = p.x - p.dx * 40, ty = p.y - p.dy * 40;
+      var grad = ctx.createLinearGradient(tx, ty, p.x, p.y);
+      grad.addColorStop(0, 'rgba(95,212,255,0)'); grad.addColorStop(1, 'rgba(95,212,255,0.8)');
+      ctx.strokeStyle = grad; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(tx + .5, ty + .5); ctx.lineTo(p.x + .5, p.y + .5); ctx.stroke();
+      return p.x < w + 80 && p.y < h + 80;
+    });
+    requestAnimationFrame(frame);
+  }
+  size();
+  window.addEventListener('resize', size);
+  if (reduce) drawGrid(); else frame();
+})();
+</script>
+</body>
+</html>
